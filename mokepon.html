@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="uft-8" name="viewport" content="width=device-width, initial-scale=1">
+        <title>Moképoñ</title>
+        <link rel="stylesheet" href="./style.css">
+    </head>
+    <body>
+        <section class="cabezal">
+            <h1> Moképoñ! 🔥💧🌿</h1>
+        </section> 
+        <section id="seleccion-elemento">
+            <h2 class="subtitulo">Elige a tu Moképoñ:</h2>
+            <div id="contenedorTarjetas" class="mokepones">
+
+            </div>
+            <button id="boton-seleccion-mokepon">
+                Seleccionar
+            </button>
+        </section>
+
+        <section id="seleccion-ataque">
+            <h2 class="subtitulo"> Elige tu ataque: </h2>
+            <div id="botones-ataque">
+            </div>
+
+            <div id="logs-combate">
+                    <p id="log-resultado"> Que comience el duelo Moképoñ! 💪💪💪</p>   
+                    <section id="reiniciar">
+                        <button id="boton-reiniciar">
+                            Reiniciar juego
+                        </button>
+                    </section>          
+            </div>
+
+            <div id="barra-vidas">
+                <div id="log-jugador">
+                    <p id="vidas-jugador">3</p>
+                    <p id="mokepon-seleccionado">Mokèpoñ</p>
+                    <div id="log-ataque-jugador"></div>
+                </div>
+                <div id="log-oponente">
+                    <p id="vidas-oponente">3</p>
+                    <p id="mokepon-oponente">Mokèpoñ</p>
+                    <div id="log-ataque-oponente"></div>
+                </div>    
+            </div>
+        </section>
+        <script src="js/mokepon.js"></script>
+    </body>
+</html>
