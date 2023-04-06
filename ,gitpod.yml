@@ -1,0 +1,10 @@
+tasks:
+  - name: js
+    command: |
+      cd js
+      npm i
+ports:
+  - name: frontend
+    port: 3000
+    onOpen: open-browser
+    visibility: public
