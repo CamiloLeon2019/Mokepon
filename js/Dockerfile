@@ -1,12 +1,8 @@
-FROM node:16.18
+FROM node
 
-ENV PORT=3000
+WORKDIR /app
+COPY . .
 
-COPY . /js
-COPY script-npm.sh /
-WORKDIR /js
 RUN npm install
-RUN python3 -m http.server
-RUN chmod +x /script-npm.sh
-EXPOSE ${PORT}
-CMD ["/script-npm.sh"]
+
+CMD [ "node", "server.js" ]

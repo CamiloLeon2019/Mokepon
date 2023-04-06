@@ -1,0 +1,8 @@
+version: "3.8"
+services:
+  my-app:
+    image: node
+    build: .
+    command: node server.js
+    ports:
+      - "3000:3000"
