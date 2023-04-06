@@ -7,8 +7,10 @@ let ataques = []
 let opcionDeMokepoñes
 let inputHombreOsoCerdo
 let inputTortuerto     
-let inputHuevardo      
+let inputHuevardo
+let ataquesMokepon    
 const contenedorTarjetas =  document.getElementById("contenedorTarjetas")
+const contenedorAtaques = document.getElementById('botones-ataque')
 const mokeponSeleccionado = document.getElementById('mokepon-seleccionado')
 const mokeponOponenteSeleccionado = document.getElementById('mokepon-oponente')
 const logAtaqueJugador = document.getElementById('log-ataque-jugador')
@@ -91,18 +93,6 @@ function iniciarJuego(){
     inputHuevardo       = document.getElementById('Huevardo')
     })
 
-    ataques.forEach((ataque) => { 
-        opcionesDeAtaque = `
-            <button id="boton-ataque-fuego" class="boton-ataque">
-
-            </button>
-            <button id="boton-ataque-agua" class="boton-ataque">
-                Water!!! 💧
-            </button>
-            <button id="boton-ataque-tierra" class="boton-ataque">
-                Leaf!!! 🌿
-            </button>`
-    })
     botonMokeponJugador.addEventListener('click', seleccionarMokeponJugador)
     botonAtaqueFuego.addEventListener('click',ataqueFuego)
     botonAtaqueAgua.addEventListener('click',ataqueAgua)
@@ -140,6 +130,17 @@ function seleccionarMokeponEnemigo(){
 //Uso de la libreria MATH para usar random y generar un numero entre 0 y 1, para despues sumarle 1, 2... n para generar aletoriedad 
 function aleatorio(min,max){
     return Math.floor(Math.random() * (max-min+1) + min)
+}
+
+function mostrarAtaques(ataques){
+    ataques.forEach((ataque) => {
+        ataquesMokepon = `
+            <button id=${ataque.tipo} class="boton-ataque">
+                ${ataque.nombre}
+            </button>`
+        
+        contenedorAtaques.innerHTML += ataquesMokepon
+    })
 }
 
 //Logica de botones de seleccion de cada elemento
