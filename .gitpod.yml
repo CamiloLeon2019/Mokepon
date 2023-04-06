@@ -4,7 +4,7 @@ tasks:
       cd js
       npm i
 ports:
-  - name: frontend
+  - name: mokepon
     port: 3000
     onOpen: open-browser
     visibility: public
