@@ -1,7 +1,12 @@
 version: "3.8"
 services:
-  my-app:
-    image: node
-    build: .
+  mokepon:
+    image: mokepon:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/workspace
+      - /workspace:/mokepon
     ports:
       - "3000:3000"

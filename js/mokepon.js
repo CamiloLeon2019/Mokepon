@@ -9,6 +9,7 @@ let inputHombreOsoCerdo
 let inputTortuerto     
 let inputHuevardo
 let ataquesMokepon    
+let mokeponJugador
 const contenedorTarjetas =  document.getElementById("contenedorTarjetas")
 const contenedorAtaques = document.getElementById('botones-ataque')
 const mokeponSeleccionado = document.getElementById('mokepon-seleccionado')
@@ -70,9 +71,9 @@ class Ataque{
     }
 }
 
-let fuego = Ataque('Fuego', 'fuego')
-let agua = Ataque('Agua', 'agua')
-let tierra = Ataque('Tierra', 'tierra')
+let fuego = new Ataque('Fuego', 'fuego')
+let agua = new Ataque('Agua', 'agua')
+let tierra = new Ataque('Tierra', 'tierra')
 
 ataques.push(fuego,agua,tierra)
 
@@ -94,9 +95,6 @@ function iniciarJuego(){
     })
 
     botonMokeponJugador.addEventListener('click', seleccionarMokeponJugador)
-    botonAtaqueFuego.addEventListener('click',ataqueFuego)
-    botonAtaqueAgua.addEventListener('click',ataqueAgua)
-    botonAtaqueTierra.addEventListener('click',ataqueTierra)
     seccionAtaques.style.display = 'none'
     botonReiniciar.style.display = 'none'
 }
@@ -107,16 +105,30 @@ function seleccionarMokeponJugador(){
     if(inputHombreOsoCerdo.checked == true){
         alert('Seleccionaste a Hombre Oso Cerdo')
         mokeponSeleccionado.innerHTML = inputHombreOsoCerdo.id
+        mokeponJugador = inputHombreOsoCerdo.id
     }else if(inputHuevardo.checked == true){
         alert('Seleccionaste a Huevardo')
         mokeponSeleccionado.innerHTML = inputHuevardo.id
+        mokeponJugador = inputHuevardo.id
     }else if (inputTortuerto.checked == true){
         alert('Seleccionaste a Tortuerto')
         mokeponSeleccionado.innerHTML = inputTortuerto.id
+        mokeponJugador = inputTortuerto.id
     }else{
         alert('No has seleccionado ningun Moképoñ')
     }
+    extraerAtaques(mokeponJugador)
     seleccionarMokeponEnemigo()
+}
+
+function extraerAtaques(mokeponSeleccionado){
+    let ataques
+    for (let i = 0; i < mokepones.length; i++){
+        if(mokeponSeleccionado === mokepones[i].nombre){
+                ataques = mokepones[i].ataques
+        }
+    }
+    console.log(ataques)
 }
 
 //Selecciona un mokepoñ de manera aleatoria entre las 3 opciones disponibles

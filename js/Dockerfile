@@ -1,8 +1,9 @@
 FROM node
 
-WORKDIR /app
-COPY . .
+WORKDIR /mokepon
+COPY . /mokepon
 
 RUN npm install
+
 
 CMD [ "node", "server.js" ]
