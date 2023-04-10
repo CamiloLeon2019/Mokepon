@@ -10,15 +10,17 @@ let inputTortuerto
 let inputHuevardo
 let ataquesMokepon    
 let mokeponJugador
+let botonAtaqueFuego 
+let botonAtaqueAgua 
+let botonAtaqueTierra
+let botones = []
+let ataqueMokepon = []
 const contenedorTarjetas =  document.getElementById("contenedorTarjetas")
 const contenedorAtaques = document.getElementById('botones-ataque')
 const mokeponSeleccionado = document.getElementById('mokepon-seleccionado')
 const mokeponOponenteSeleccionado = document.getElementById('mokepon-oponente')
 const logAtaqueJugador = document.getElementById('log-ataque-jugador')
 const logAtaqueOponente = document.getElementById('log-ataque-oponente')
-const botonAtaqueFuego = document.getElementById('boton-ataque-fuego')
-const botonAtaqueAgua = document.getElementById('boton-ataque-agua')
-const botonAtaqueTierra = document.getElementById('boton-ataque-tierra')
 const botonMokeponJugador = document.getElementById('boton-seleccion-mokepon')
 const botonReiniciar = document.getElementById('reiniciar')
 const seccionAtaques = document.getElementById('seleccion-ataque')
@@ -34,6 +36,7 @@ class Mokepoñ{
         this.ataques = []
     }
 }
+
 
 let hombreOsoCerdo = new Mokepoñ('HombreOsoCerdo', './img/manbearpig.jpg', 5)
 let tortuerto = new Mokepoñ('Tortuerto', './img/tortuerto.jpg', 5)
@@ -56,7 +59,7 @@ tortuerto.ataques.push(
 )
 
 huevardo.ataques.push(
-    {nombre: '🥬', id: 'boton-ataque-tierra'},
+    {nombre: '', id: 'boton-ataque-tierra'},
     {nombre: '🥬', id: 'boton-ataque-tierra'},
     {nombre: '🥬', id: 'boton-ataque-tierra'},
     {nombre: '💧', id: 'boton-ataque-agua'},
@@ -121,6 +124,7 @@ function seleccionarMokeponJugador(){
     seleccionarMokeponEnemigo()
 }
 
+//Funcion para extrear el aray de ataques de cada objeto Mokepon
 function extraerAtaques(mokeponSeleccionado){
     let ataques
     for (let i = 0; i < mokepones.length; i++){
@@ -128,7 +132,7 @@ function extraerAtaques(mokeponSeleccionado){
                 ataques = mokepones[i].ataques
         }
     }
-    console.log(ataques)
+    mostrarAtaques(ataques)
 }
 
 //Selecciona un mokepoñ de manera aleatoria entre las 3 opciones disponibles
@@ -137,6 +141,7 @@ function seleccionarMokeponEnemigo(){
     mokeponOponenteSeleccionado.innerHTML = mokepones[oponente].nombre
     seccionSeleccionMokepon.style.display = 'none'
     seccionAtaques.style.display = 'flex'
+    sequenciaAtaque()
 }
 
 //Uso de la libreria MATH para usar random y generar un numero entre 0 y 1, para despues sumarle 1, 2... n para generar aletoriedad 
@@ -147,11 +152,43 @@ function aleatorio(min,max){
 function mostrarAtaques(ataques){
     ataques.forEach((ataque) => {
         ataquesMokepon = `
-            <button id=${ataque.tipo} class="boton-ataque">
+            <button id=${ataque.id} class="boton-ataque BAtaque">
                 ${ataque.nombre}
             </button>`
         
         contenedorAtaques.innerHTML += ataquesMokepon
+    })
+
+    botonAtaqueFuego = document.getElementById('boton-ataque-fuego')
+    botonAtaqueAgua = document.getElementById('boton-ataque-agua')
+    botonAtaqueTierra = document.getElementById('boton-ataque-tierra')
+    botones = document.querySelectorAll('.BAtaque')
+
+    console.log(botones)
+
+    botonAtaqueFuego.addEventListener('click',ataqueFuego)
+    botonAtaqueAgua.addEventListener('click',ataqueAgua)
+    botonAtaqueTierra.addEventListener('click',ataqueTierra)
+}
+
+
+function sequenciaAtaque(){
+    botones.forEach((boton) => {
+        boton.addEventListener('click', (e) => {
+            if(e.target.outerText === '🔥'){
+                ataqueMokepon.push('FUEGO')
+                console.log(ataqueMokepon)
+                boton.style.background = '#112f58'
+            }else if(e.target.outerText === '💧'){
+                ataqueMokepon.push('AGUA')
+                console.log(ataqueMokepon)
+                boton.style.background = '#112f58'
+            }else{
+                ataqueMokepon.push('TIERRA')
+                console.log(ataqueMokepon)
+                boton.style.background = '#112f58'
+            }       
+        })
     })
 }
 
