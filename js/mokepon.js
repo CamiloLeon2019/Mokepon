@@ -4,11 +4,13 @@ let vidaJugador = 3
 let vidaOponente = 3
 let mokepones = []
 let ataques = []
+let ataquesPC = []
 let opcionDeMokepoñes
 let inputHombreOsoCerdo
 let inputTortuerto     
 let inputHuevardo
-let ataquesMokepon    
+let ataquesMokepon  
+let ataquesMokeponEnemigo  
 let mokeponJugador
 let botonAtaqueFuego 
 let botonAtaqueAgua 
@@ -59,7 +61,7 @@ tortuerto.ataques.push(
 )
 
 huevardo.ataques.push(
-    {nombre: '', id: 'boton-ataque-tierra'},
+    {nombre: '🥬', id: 'boton-ataque-tierra'},
     {nombre: '🥬', id: 'boton-ataque-tierra'},
     {nombre: '🥬', id: 'boton-ataque-tierra'},
     {nombre: '💧', id: 'boton-ataque-agua'},
@@ -139,6 +141,7 @@ function extraerAtaques(mokeponSeleccionado){
 function seleccionarMokeponEnemigo(){
     let oponente = aleatorio(0,mokepones.length-1)
     mokeponOponenteSeleccionado.innerHTML = mokepones[oponente].nombre
+    ataquesMokeponEnemigo = mokepones[oponente].ataques
     seccionSeleccionMokepon.style.display = 'none'
     seccionAtaques.style.display = 'flex'
     sequenciaAtaque()
@@ -164,63 +167,58 @@ function mostrarAtaques(ataques){
     botonAtaqueTierra = document.getElementById('boton-ataque-tierra')
     botones = document.querySelectorAll('.BAtaque')
 
-    console.log(botones)
-
     botonAtaqueFuego.addEventListener('click',ataqueFuego)
     botonAtaqueAgua.addEventListener('click',ataqueAgua)
     botonAtaqueTierra.addEventListener('click',ataqueTierra)
 }
 
-
+//Logica para crear el array con la sequencia de los 5 ataques del juego
 function sequenciaAtaque(){
     botones.forEach((boton) => {
         boton.addEventListener('click', (e) => {
             if(e.target.outerText === '🔥'){
                 ataqueMokepon.push('FUEGO')
-                console.log(ataqueMokepon)
                 boton.style.background = '#112f58'
             }else if(e.target.outerText === '💧'){
                 ataqueMokepon.push('AGUA')
-                console.log(ataqueMokepon)
                 boton.style.background = '#112f58'
             }else{
                 ataqueMokepon.push('TIERRA')
-                console.log(ataqueMokepon)
                 boton.style.background = '#112f58'
             }       
         })
+    ataqueOponente()
     })
 }
 
 //Logica de botones de seleccion de cada elemento
 function ataqueFuego(){
-    ataqueJugador = 'FUEGO'
     alert('Como lo que siento por ti bb 🔥')
     ataqueOponente()
 }
 
 function ataqueAgua(){
-    ataqueJugador = 'AGUA'
     alert('Lo que escurre por tus piernas 💧')
     ataqueOponente()
 }
 
 function ataqueTierra(){
-    ataqueJugador = 'TIERRA'
     alert('Lo que te envuelve como flor 🥬')
     ataqueOponente()
 }
 
 //Logica para seleccionar ataque de oponente de manera aleatoria
 function ataqueOponente(){
-    let ataque = aleatorio(1,3)
-    if(ataque == 1){
-        ataquePC = 'FUEGO'
-    }else if(ataque == 2){
-        ataquePC = 'AGUA'
+    let ataque = aleatorio(0,ataquesMokeponEnemigo.length -1)
+
+    if(ataque == 0 || ataque == 1 ){
+        ataquesPC.push('FUEGO')
+    }else if(ataque == 3 || ataque == 4){
+        ataquesPC.push('AGUA')
     }else{
-        ataquePC = 'TIERRA'
+        ataquesPC.push('TIERRA')
     }
+    console.log(ataquesPC)
     combate()
     revisarVidas()
 }
