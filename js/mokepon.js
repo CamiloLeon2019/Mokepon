@@ -1,22 +1,24 @@
-let ataqueJugador = ''
-let ataquePC = ''
-let vidaJugador = 3
-let vidaOponente = 3
+let victoriasJugador = 0
+let victoriasEnemigo = 0
 let mokepones = []
 let ataques = []
-let ataquesPC = []
+let ataquesEnemigo = []
 let opcionDeMokepoñes
 let inputHombreOsoCerdo
 let inputTortuerto     
 let inputHuevardo
-let ataquesMokepon  
-let ataquesMokeponEnemigo  
 let mokeponJugador
 let botonAtaqueFuego 
 let botonAtaqueAgua 
 let botonAtaqueTierra
+let indexAtaqueJugador
+let indexAtaqueEnemigo
 let botones = []
-let ataqueMokepon = []
+let ataquesJugador = []
+let ataquesMokepon = []
+let ataquesMokeponEnemigo = []
+const spanVidasJugador = document.getElementById('vidas-jugador')
+const spanVidasEnemigo = document.getElementById('vidas-oponente')
 const contenedorTarjetas =  document.getElementById("contenedorTarjetas")
 const contenedorAtaques = document.getElementById('botones-ataque')
 const mokeponSeleccionado = document.getElementById('mokepon-seleccionado')
@@ -166,10 +168,6 @@ function mostrarAtaques(ataques){
     botonAtaqueAgua = document.getElementById('boton-ataque-agua')
     botonAtaqueTierra = document.getElementById('boton-ataque-tierra')
     botones = document.querySelectorAll('.BAtaque')
-
-    botonAtaqueFuego.addEventListener('click',ataqueFuego)
-    botonAtaqueAgua.addEventListener('click',ataqueAgua)
-    botonAtaqueTierra.addEventListener('click',ataqueTierra)
 }
 
 //Logica para crear el array con la sequencia de los 5 ataques del juego
@@ -177,83 +175,89 @@ function sequenciaAtaque(){
     botones.forEach((boton) => {
         boton.addEventListener('click', (e) => {
             if(e.target.outerText === '🔥'){
-                ataqueMokepon.push('FUEGO')
+                ataquesJugador.push('FUEGO')
                 boton.style.background = '#112f58'
+                boton.disabled = true
             }else if(e.target.outerText === '💧'){
-                ataqueMokepon.push('AGUA')
+                ataquesJugador.push('AGUA')
                 boton.style.background = '#112f58'
+                boton.disabled = true
             }else{
-                ataqueMokepon.push('TIERRA')
+                ataquesJugador.push('TIERRA')
                 boton.style.background = '#112f58'
-            }       
+                boton.disabled = true
+            } 
+            console.log(ataquesJugador)
+            ataqueOponente()   
         })
-    ataqueOponente()
     })
-}
-
-//Logica de botones de seleccion de cada elemento
-function ataqueFuego(){
-    alert('Como lo que siento por ti bb 🔥')
-    ataqueOponente()
-}
-
-function ataqueAgua(){
-    alert('Lo que escurre por tus piernas 💧')
-    ataqueOponente()
-}
-
-function ataqueTierra(){
-    alert('Lo que te envuelve como flor 🥬')
-    ataqueOponente()
 }
 
 //Logica para seleccionar ataque de oponente de manera aleatoria
 function ataqueOponente(){
-    let ataque = aleatorio(0,ataquesMokeponEnemigo.length -1)
+    let ataqueAleatorio = aleatorio(0,ataquesMokeponEnemigo.length -1)
 
-    if(ataque == 0 || ataque == 1 ){
-        ataquesPC.push('FUEGO')
-    }else if(ataque == 3 || ataque == 4){
-        ataquesPC.push('AGUA')
-    }else{
-        ataquesPC.push('TIERRA')
+        if(ataquesMokeponEnemigo[ataqueAleatorio].nombre === '🔥'){
+            ataquesEnemigo.push('FUEGO')
+        }else if(ataquesMokeponEnemigo[ataqueAleatorio].nombre === '💧'){
+            ataquesEnemigo.push('AGUA')
+        }else
+            ataquesEnemigo.push('TIERRA')
+    console.log(ataquesEnemigo)
+    iniciarCombate()
+}
+
+//Valida que la secuencia de x ataques del jugador se haya completado
+function iniciarCombate(){
+    console.log('combate iniciado')
+    if (ataquesJugador.length === 5){
+        combate()
     }
-    console.log(ataquesPC)
-    combate()
-    revisarVidas()
+}
+
+function indexAmbosOponentes(jugador, enemigo){
+    indexAtaqueJugador = ataquesJugador[jugador]
+    indexAtaqueEnemigo = ataquesEnemigo[enemigo]
 }
 
 //Logica de combate donde es similar a piedra, papel o tijera
 function combate(){
-    if ( ataqueJugador == ataquePC){
-        crearMensaje('EMPATE')
-    }else if (ataqueJugador == 'FUEGO' && ataquePC == 'TIERRA' || ataqueJugador == 'AGUA' && ataquePC == 'FUEGO' || ataqueJugador == 'TIERRA' && ataquePC == 'AGUA'){
-        crearMensaje('VICTORIA')
-        vidaOponente--
-        document.getElementById('vidas-oponente').innerHTML = vidaOponente
-    }else{
-        crearMensaje('DERROTA')
-        vidaJugador--
-        document.getElementById('vidas-jugador').innerHTML = vidaJugador
+    for (let i = 0; i < ataquesJugador.length; i++) {
+        if(ataquesJugador[i] === ataquesEnemigo[i]){
+            indexAmbosOponentes(i,i)
+            almacenarResultado()
+        }else if (ataquesJugador[i] == 'FUEGO' && ataquesEnemigo[i] == 'TIERRA' || ataquesJugador[i] == 'AGUA' && ataquesEnemigo[i] == 'FUEGO' || ataquesJugador[i] == 'TIERRA' && ataquesEnemigo[i] == 'AGUA'){
+            indexAmbosOponentes(i,i)
+            almacenarResultado()
+            victoriasJugador++
+            spanVidasJugador.innerHTML = victoriasJugador 
+        }else{
+            indexAmbosOponentes(i,i)
+            victoriasEnemigo++
+            spanVidasEnemigo.innerHTML = victoriasEnemigo  
+            almacenarResultado()
+        }
     }
+    revisarVictorias()
 }
 
 //Realiza la revision de la vida de cada jugador, si alguno llega a 0 primero, se acaba el juego.
-function revisarVidas(){
-    if(vidaOponente == 0){
-        crearMensajeFinal('Has Ganaó, Joder!')
-    }else if(vidaJugador == 0)
-        crearMensajeFinal('La has cagaó. Coño!')
+function revisarVictorias(){
+    if(victoriasJugador === victoriasEnemigo){
+        crearMensajeFinal('Esto ha concluido en empate!')
+    }else if(victoriasJugador > victoriasEnemigo)
+        crearMensajeFinal('Ha sido una victoria tuya')
+    else
+        crearMensajeFinal('Ha sido una victoria oponente') 
 }
 
 //Crea mensaje para logs donde se ve ataque jugador, ataque enemigo y resultado
-function crearMensaje(resultado){
+function almacenarResultado(){
     let nuevoAtaqueJugador = document.createElement('p')
     let nuevoAtaqueOponente = document.createElement('p')
 
-    sectionResultado.innerHTML = resultado
-    nuevoAtaqueJugador.innerHTML = ataqueJugador
-    nuevoAtaqueOponente.innerHTML = ataquePC
+    nuevoAtaqueJugador.innerHTML = indexAtaqueJugador
+    nuevoAtaqueOponente.innerHTML = indexAtaqueEnemigo
     logAtaqueJugador.appendChild(nuevoAtaqueJugador)
     logAtaqueOponente.appendChild(nuevoAtaqueOponente)
 }
@@ -261,14 +265,11 @@ function crearMensaje(resultado){
 //Crea mensaje final resultado de la batalla y termina el juego
 function crearMensajeFinal(resultado){
     let parrafo = document.createElement('p')
-
+    sectionResultado.innerHTML = ''
     parrafo.innerHTML = resultado
     sectionHub.appendChild(parrafo)
     botonReiniciar.style.display = 'block'
     botonReiniciar.addEventListener('click', reiniciarJuego)
-    botonAtaqueAgua.disabled = true
-    botonAtaqueFuego.disabled = true
-    botonAtaqueTierra.disabled = true
 }
 
 //Permite reiniciar el juego haciendo un reinicio

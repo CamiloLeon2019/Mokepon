@@ -51,10 +51,11 @@ body{
 }
 
 #logs-combate{
-    width: 480px;
+    width: 560px;
     align-items: center;
     display: flex;
     flex-direction: column;
+    font-size: x-large;
     background-color: rgb(214, 205, 164);
     border-radius: 20px;
     margin: 20px;
@@ -182,6 +183,7 @@ body{
 
 .boton-ataque{
     background-color: sandybrown;
+    width: 120px;
     padding: 12px;
     font-family: 'Itim', cursive;
     font-size: xx-large;
