@@ -7,7 +7,11 @@ let opcionDeMokepoñes
 let inputHombreOsoCerdo
 let inputTortuerto     
 let inputHuevardo
+let inputCamascuas
+let inputNanai
+let inputPytwo
 let mokeponJugador
+let mokeponEnemigo
 let botonAtaqueFuego 
 let botonAtaqueAgua 
 let botonAtaqueTierra
@@ -17,6 +21,7 @@ let botones = []
 let ataquesJugador = []
 let ataquesMokepon = []
 let ataquesMokeponEnemigo = []
+let ataqueAdicional
 const spanVidasJugador = document.getElementById('vidas-jugador')
 const spanVidasEnemigo = document.getElementById('vidas-oponente')
 const contenedorTarjetas =  document.getElementById("contenedorTarjetas")
@@ -31,20 +36,24 @@ const seccionAtaques = document.getElementById('seleccion-ataque')
 const seccionSeleccionMokepon = document.getElementById('seleccion-elemento')
 const sectionResultado = document.getElementById('log-resultado')
 const sectionHub = document.getElementById('logs-combate')
+const sectionVerMapa = document.getElementById('ver-mapa')
+const mapa = document.getElementById('mapa') 
 
 class Mokepoñ{
-    constructor(nombre,foto, vida){
+    constructor(nombre, tipo, foto){
         this.nombre = nombre
+        this.tipo = tipo
         this.foto = foto
-        this.vida = vida
         this.ataques = []
     }
 }
 
-
-let hombreOsoCerdo = new Mokepoñ('HombreOsoCerdo', './img/manbearpig.jpg', 5)
-let tortuerto = new Mokepoñ('Tortuerto', './img/tortuerto.jpg', 5)
-let huevardo = new Mokepoñ('Huevardo', './img/huevardo.jpg', 5)
+let hombreOsoCerdo = new Mokepoñ('HombreOsoCerdo', 'fuego','./img/manbearpig.jpg')
+let tortuerto = new Mokepoñ('Tortuerto', 'agua','./img/tortuerto.jpg')
+let huevardo = new Mokepoñ('Huevardo', 'tierra' ,'./img/huevardo.jpg')
+let camascuas = new Mokepoñ('Camascuas', 'fuego', './img/Camascuas.png')
+let nanai = new Mokepoñ('Nanai', 'agua', './img/Nanai.png')
+let pytwo = new Mokepoñ('Pytwo', 'tierra', './img/Pytwo.png')
 
 hombreOsoCerdo.ataques.push(
     {nombre: '🔥', id: 'boton-ataque-fuego'},
@@ -69,7 +78,30 @@ huevardo.ataques.push(
     {nombre: '💧', id: 'boton-ataque-agua'},
     {nombre: '🔥', id: 'boton-ataque-fuego'}
 )
-mokepones.push(hombreOsoCerdo,tortuerto,huevardo)
+camascuas.ataques.push(
+    {nombre: '🔥', id: 'boton-ataque-fuego'},
+    {nombre: '🔥', id: 'boton-ataque-fuego'},
+    {nombre: '🔥', id: 'boton-ataque-fuego'},
+    {nombre: '💧', id: 'boton-ataque-agua'},
+    {nombre: '🥬', id: 'boton-ataque-tierra'}
+)
+
+nanai.ataques.push(
+    {nombre: '💧', id: 'boton-ataque-agua'},
+    {nombre: '💧', id: 'boton-ataque-agua'},
+    {nombre: '💧', id: 'boton-ataque-agua'},
+    {nombre: '🔥', id: 'boton-ataque-fuego'},
+    {nombre: '🥬', id: 'boton-ataque-tierra'}
+)
+
+pytwo.ataques.push(
+    {nombre: '🥬', id: 'boton-ataque-tierra'},
+    {nombre: '🥬', id: 'boton-ataque-tierra'},
+    {nombre: '🥬', id: 'boton-ataque-tierra'},
+    {nombre: '💧', id: 'boton-ataque-agua'},
+    {nombre: '🔥', id: 'boton-ataque-fuego'}
+)
+mokepones.push(hombreOsoCerdo,tortuerto,huevardo,camascuas,nanai,pytwo)
 
 class Ataque{
     constructor(nombre, tipo){
@@ -89,7 +121,7 @@ function iniciarJuego(){
     mokepones.forEach((mokepon) =>{
        opcionDeMokepoñes = 
        `<input type="radio" name="mascota" id="${mokepon.nombre}" />
-       <label class="tarjeta-mokepon-fuego" for="${mokepon.nombre}">
+       <label class="tarjeta-mokepon" for="${mokepon.nombre}">
            <p>${mokepon.nombre}</p>
            <img src="${mokepon.foto}" alt="${mokepon.nombre}">
        </label>`
@@ -99,10 +131,14 @@ function iniciarJuego(){
     inputHombreOsoCerdo = document.getElementById('HombreOsoCerdo')
     inputTortuerto      = document.getElementById('Tortuerto')
     inputHuevardo       = document.getElementById('Huevardo')
+    inputCamascuas      = document.getElementById('Camascuas')
+    inputNanai          = document.getElementById('Nanai')
+    inputPytwo          = document.getElementById('Pytwo')
     })
 
     botonMokeponJugador.addEventListener('click', seleccionarMokeponJugador)
     seccionAtaques.style.display = 'none'
+    sectionVerMapa.style.display = 'none'
     botonReiniciar.style.display = 'none'
 }
 
@@ -112,40 +148,59 @@ function seleccionarMokeponJugador(){
     if(inputHombreOsoCerdo.checked == true){
         alert('Seleccionaste a Hombre Oso Cerdo')
         mokeponSeleccionado.innerHTML = inputHombreOsoCerdo.id
-        mokeponJugador = inputHombreOsoCerdo.id
+        mokeponJugador = hombreOsoCerdo
     }else if(inputHuevardo.checked == true){
         alert('Seleccionaste a Huevardo')
         mokeponSeleccionado.innerHTML = inputHuevardo.id
-        mokeponJugador = inputHuevardo.id
+        mokeponJugador = huevardo
     }else if (inputTortuerto.checked == true){
         alert('Seleccionaste a Tortuerto')
         mokeponSeleccionado.innerHTML = inputTortuerto.id
-        mokeponJugador = inputTortuerto.id
+        mokeponJugador = tortuerto
+    }else if(inputCamascuas.checked == true){
+        alert('Seleccionaste a Camascuas')
+        mokeponSeleccionado.innerHTML = inputCamascuas.id
+        mokeponJugador = camascuas
+    }else if(inputNanai.checked == true){
+        alert('Seleccionaste a Nanai')
+        mokeponSeleccionado.innerHTML = inputNanai.id
+        mokeponJugador = nanai
+    }else if (inputPytwo.checked == true){
+        alert('Seleccionaste a Pytwo')
+        mokeponSeleccionado.innerHTML = inputPytwo.id
+        mokeponJugador = pytwo
     }else{
         alert('No has seleccionado ningun Moképoñ')
     }
-    extraerAtaques(mokeponJugador)
-    seleccionarMokeponEnemigo()
+    seleccionarMokeponEnemigo(mokeponJugador)
 }
 
 //Funcion para extrear el aray de ataques de cada objeto Mokepon
 function extraerAtaques(mokeponSeleccionado){
     let ataques
     for (let i = 0; i < mokepones.length; i++){
-        if(mokeponSeleccionado === mokepones[i].nombre){
-                ataques = mokepones[i].ataques
+        if(mokeponSeleccionado.nombre === mokepones[i].nombre){
+            ataques = mokepones[i].ataques
         }
     }
+    if(mokeponJugador.tipo == 'fuego' && mokeponEnemigo.tipo == 'tierra' || mokeponJugador.tipo == 'agua' && mokeponEnemigo.tipo == 'fuego' || mokeponJugador.tipo == 'tierra' && mokeponEnemigo.tipo == 'agua'){
+        ataqueAdicional = ataques[aleatorio(0,ataques.length -1)]
+        console.log(ataqueAdicional)
+        ataques.push(ataqueAdicional)
+    } 
     mostrarAtaques(ataques)
 }
 
 //Selecciona un mokepoñ de manera aleatoria entre las 3 opciones disponibles
-function seleccionarMokeponEnemigo(){
+function seleccionarMokeponEnemigo(mokeponJugador){
     let oponente = aleatorio(0,mokepones.length-1)
-    mokeponOponenteSeleccionado.innerHTML = mokepones[oponente].nombre
+    mokeponEnemigo = mokepones[oponente]
+    mokeponOponenteSeleccionado.innerHTML = mokepones[oponente].nombre 
     ataquesMokeponEnemigo = mokepones[oponente].ataques
+    extraerAtaques(mokeponJugador)
     seccionSeleccionMokepon.style.display = 'none'
-    seccionAtaques.style.display = 'flex'
+    //seccionAtaques.style.display = 'flex'
+    sectionVerMapa.style.display = 'flex'
     sequenciaAtaque()
 }
 
@@ -154,13 +209,12 @@ function aleatorio(min,max){
     return Math.floor(Math.random() * (max-min+1) + min)
 }
 
-function mostrarAtaques(ataques){
+function mostrarAtaques(ataques){  
     ataques.forEach((ataque) => {
         ataquesMokepon = `
             <button id=${ataque.id} class="boton-ataque BAtaque">
                 ${ataque.nombre}
-            </button>`
-        
+            </button>`      
         contenedorAtaques.innerHTML += ataquesMokepon
     })
 
@@ -215,6 +269,7 @@ function iniciarCombate(){
     }
 }
 
+//Usado para igualar cada secuencia de ataque 
 function indexAmbosOponentes(jugador, enemigo){
     indexAtaqueJugador = ataquesJugador[jugador]
     indexAtaqueEnemigo = ataquesEnemigo[enemigo]
