@@ -22,6 +22,7 @@ let ataquesJugador = []
 let ataquesMokepon = []
 let ataquesMokeponEnemigo = []
 let ataqueAdicional
+let intervalo
 const spanVidasJugador = document.getElementById('vidas-jugador')
 const spanVidasEnemigo = document.getElementById('vidas-oponente')
 const contenedorTarjetas =  document.getElementById("contenedorTarjetas")
@@ -37,7 +38,10 @@ const seccionSeleccionMokepon = document.getElementById('seleccion-elemento')
 const sectionResultado = document.getElementById('log-resultado')
 const sectionHub = document.getElementById('logs-combate')
 const sectionVerMapa = document.getElementById('ver-mapa')
-const mapa = document.getElementById('mapa') 
+const mapa = document.getElementById('mapa')
+let lienzo = mapa.getContext("2d")
+let mapaBackground = new Image()
+mapaBackground.src = './img/map.png'
 
 class Mokepoñ{
     constructor(nombre, tipo, foto){
@@ -45,6 +49,14 @@ class Mokepoñ{
         this.tipo = tipo
         this.foto = foto
         this.ataques = []
+        this.x = 20
+        this.y = 30
+        this.ancho = 80
+        this.alto = 80
+        this.mapaFoto = new Image()
+        this.mapaFoto.src = foto
+        this.velocidadX = 0
+        this.velocidadY = 0
     }
 }
 
@@ -62,7 +74,6 @@ hombreOsoCerdo.ataques.push(
     {nombre: '💧', id: 'boton-ataque-agua'},
     {nombre: '🥬', id: 'boton-ataque-tierra'}
 )
-
 tortuerto.ataques.push(
     {nombre: '💧', id: 'boton-ataque-agua'},
     {nombre: '💧', id: 'boton-ataque-agua'},
@@ -70,7 +81,6 @@ tortuerto.ataques.push(
     {nombre: '🔥', id: 'boton-ataque-fuego'},
     {nombre: '🥬', id: 'boton-ataque-tierra'}
 )
-
 huevardo.ataques.push(
     {nombre: '🥬', id: 'boton-ataque-tierra'},
     {nombre: '🥬', id: 'boton-ataque-tierra'},
@@ -85,7 +95,6 @@ camascuas.ataques.push(
     {nombre: '💧', id: 'boton-ataque-agua'},
     {nombre: '🥬', id: 'boton-ataque-tierra'}
 )
-
 nanai.ataques.push(
     {nombre: '💧', id: 'boton-ataque-agua'},
     {nombre: '💧', id: 'boton-ataque-agua'},
@@ -93,7 +102,6 @@ nanai.ataques.push(
     {nombre: '🔥', id: 'boton-ataque-fuego'},
     {nombre: '🥬', id: 'boton-ataque-tierra'}
 )
-
 pytwo.ataques.push(
     {nombre: '🥬', id: 'boton-ataque-tierra'},
     {nombre: '🥬', id: 'boton-ataque-tierra'},
@@ -101,6 +109,7 @@ pytwo.ataques.push(
     {nombre: '💧', id: 'boton-ataque-agua'},
     {nombre: '🔥', id: 'boton-ataque-fuego'}
 )
+
 mokepones.push(hombreOsoCerdo,tortuerto,huevardo,camascuas,nanai,pytwo)
 
 class Ataque{
@@ -201,6 +210,7 @@ function seleccionarMokeponEnemigo(mokeponJugador){
     seccionSeleccionMokepon.style.display = 'none'
     //seccionAtaques.style.display = 'flex'
     sectionVerMapa.style.display = 'flex'
+    iniciarMapa()
     sequenciaAtaque()
 }
 
@@ -327,9 +337,79 @@ function crearMensajeFinal(resultado){
     botonReiniciar.addEventListener('click', reiniciarJuego)
 }
 
+//Dibujar el personaje dentro del canvas 'mapa'
+function pintarCanvas(){
+    mokeponJugador.x += mokeponJugador.velocidadX
+    mokeponJugador.y += mokeponJugador.velocidadY
+    lienzo.clearRect(0,0,mapa.width, mapa.height)
+    lienzo.drawImage(
+        mapaBackground,
+        0,
+        0,
+        mapa.width,
+        mapa.height
+    )
+    lienzo.drawImage(
+        mokeponJugador.mapaFoto,
+        mokeponJugador.x,
+        mokeponJugador.y,
+        mokeponJugador.ancho,
+        mokeponJugador.alto
+    )
+}
+
+//Mueve el mokepoñ usando las variables velocidad para modificar su posicion
+function moverArriba(){
+    mokeponJugador.velocidadY = -5
+}
+
+function moverIzquierda(){
+    mokeponJugador.velocidadX = -5
+}
+
+function moverDerecha(){
+    mokeponJugador.velocidadX = 5
+}
+
+function moverAbajo(){
+    mokeponJugador.velocidadY = 5
+}
+
+function detenerMovimiento(){
+    mokeponJugador.velocidadX = 0
+    mokeponJugador.velocidadY = 0
+}
 //Permite reiniciar el juego haciendo un reinicio
 function reiniciarJuego(){
     location.reload()
+}
+
+//Segun la tecla presionada, mueve al Mokepoñ
+function teclaPresionada(event){
+    switch (event.key) {
+        case 'ArrowUp':
+            moverArriba()
+            break
+        case 'ArrowDown':
+            moverAbajo()
+            break
+        case 'ArrowLeft':
+            moverIzquierda()
+            break
+        case 'ArrowRight':
+            moverDerecha()
+            break  
+        default:
+            break
+    }
+}
+
+function iniciarMapa(){
+    mapa.width = 800
+    mapa.height = 600
+    intervalo = setInterval(pintarCanvas, 50)
+    window.addEventListener('keydown', teclaPresionada)
+    window.addEventListener('keyup', detenerMovimiento)  
 }
 
 //Carga los eventos del juego
