@@ -42,30 +42,51 @@ const mapa = document.getElementById('mapa')
 let lienzo = mapa.getContext("2d")
 let mapaBackground = new Image()
 mapaBackground.src = './img/map.png'
+let alturaQueBuscamos
+let anchoDelMapa = window.innerWidth - 20
+
+alturaQueBuscamos = anchoDelMapa* 600 / 800
+
+mapa.width = anchoDelMapa
+mapa.height = alturaQueBuscamos
 
 class Mokepoñ{
-    constructor(nombre, tipo, foto){
+    constructor(nombre, tipo, foto,fotoMapa){
         this.nombre = nombre
         this.tipo = tipo
         this.foto = foto
         this.ataques = []
-        this.x = 20
-        this.y = 30
-        this.ancho = 80
-        this.alto = 80
+        this.x = aleatorio(0,600)
+        this.y = aleatorio(0,400)
+        this.ancho = 60
+        this.alto = 60
         this.mapaFoto = new Image()
-        this.mapaFoto.src = foto
+        this.mapaFoto.src = fotoMapa
         this.velocidadX = 0
         this.velocidadY = 0
     }
+
+    pintarMokepoñ(){
+    lienzo.drawImage(
+        this.mapaFoto,
+        this.x,
+        this.y,
+        this.ancho,
+        this.alto
+    )
+    }
 }
 
-let hombreOsoCerdo = new Mokepoñ('HombreOsoCerdo', 'fuego','./img/manbearpig.jpg')
-let tortuerto = new Mokepoñ('Tortuerto', 'agua','./img/tortuerto.jpg')
-let huevardo = new Mokepoñ('Huevardo', 'tierra' ,'./img/huevardo.jpg')
-let camascuas = new Mokepoñ('Camascuas', 'fuego', './img/Camascuas.png')
-let nanai = new Mokepoñ('Nanai', 'agua', './img/Nanai.png')
-let pytwo = new Mokepoñ('Pytwo', 'tierra', './img/Pytwo.png')
+let hombreOsoCerdo = new Mokepoñ('HombreOsoCerdo', 'fuego','./img/manbearpig.jpg','./img/manbearpig.jpg')
+let tortuerto = new Mokepoñ('Tortuerto', 'agua','./img/tortuerto.jpg','./img/tortuerto.jpg')
+let huevardo = new Mokepoñ('Huevardo', 'tierra' ,'./img/huevardo.jpg','./img/huevardo.jpg')
+let camascuas = new Mokepoñ('Camascuas', 'fuego', './img/Camascuas.png','./img/CamascuasMapa.png')
+let nanai = new Mokepoñ('Nanai', 'agua', './img/Nanai.png','./img/NanaiMapa.png')
+let pytwo = new Mokepoñ('Pytwo', 'tierra', './img/Pytwo.png','./img/PytwoMapa.png')
+let hipodoge = new Mokepoñ('Hipodoge', 'agua','./img/hipodoge.png','./img/hipodoge.png')
+let capipepo = new Mokepoñ('Capipepo', 'tierra','./img/capipepo.png','./img/capipepo.png')
+let ratigueya = new Mokepoñ('Ratigueya', 'fuego' ,'./img/ratigueya.png','./img/ratigueya.png')
+
 
 hombreOsoCerdo.ataques.push(
     {nombre: '🔥', id: 'boton-ataque-fuego'},
@@ -103,6 +124,27 @@ nanai.ataques.push(
     {nombre: '🥬', id: 'boton-ataque-tierra'}
 )
 pytwo.ataques.push(
+    {nombre: '🥬', id: 'boton-ataque-tierra'},
+    {nombre: '🥬', id: 'boton-ataque-tierra'},
+    {nombre: '🥬', id: 'boton-ataque-tierra'},
+    {nombre: '💧', id: 'boton-ataque-agua'},
+    {nombre: '🔥', id: 'boton-ataque-fuego'}
+)
+ratigueya.ataques.push(
+    {nombre: '🔥', id: 'boton-ataque-fuego'},
+    {nombre: '🔥', id: 'boton-ataque-fuego'},
+    {nombre: '🔥', id: 'boton-ataque-fuego'},
+    {nombre: '💧', id: 'boton-ataque-agua'},
+    {nombre: '🥬', id: 'boton-ataque-tierra'}
+)
+hipodoge.ataques.push(
+    {nombre: '💧', id: 'boton-ataque-agua'},
+    {nombre: '💧', id: 'boton-ataque-agua'},
+    {nombre: '💧', id: 'boton-ataque-agua'},
+    {nombre: '🔥', id: 'boton-ataque-fuego'},
+    {nombre: '🥬', id: 'boton-ataque-tierra'}
+)
+capipepo.ataques.push(
     {nombre: '🥬', id: 'boton-ataque-tierra'},
     {nombre: '🥬', id: 'boton-ataque-tierra'},
     {nombre: '🥬', id: 'boton-ataque-tierra'},
@@ -181,7 +223,9 @@ function seleccionarMokeponJugador(){
     }else{
         alert('No has seleccionado ningun Moképoñ')
     }
-    seleccionarMokeponEnemigo(mokeponJugador)
+    seccionSeleccionMokepon.style.display = 'none'
+    sectionVerMapa.style.display = 'flex'
+    iniciarMapa()
 }
 
 //Funcion para extrear el aray de ataques de cada objeto Mokepon
@@ -201,16 +245,11 @@ function extraerAtaques(mokeponSeleccionado){
 }
 
 //Selecciona un mokepoñ de manera aleatoria entre las 3 opciones disponibles
-function seleccionarMokeponEnemigo(mokeponJugador){
-    let oponente = aleatorio(0,mokepones.length-1)
-    mokeponEnemigo = mokepones[oponente]
-    mokeponOponenteSeleccionado.innerHTML = mokepones[oponente].nombre 
-    ataquesMokeponEnemigo = mokepones[oponente].ataques
+function seleccionarMokeponEnemigo(enemigo){
+    mokeponEnemigo  = enemigo
+    mokeponOponenteSeleccionado.innerHTML = enemigo.nombre 
+    ataquesMokeponEnemigo = enemigo.ataques
     extraerAtaques(mokeponJugador)
-    seccionSeleccionMokepon.style.display = 'none'
-    //seccionAtaques.style.display = 'flex'
-    sectionVerMapa.style.display = 'flex'
-    iniciarMapa()
     sequenciaAtaque()
 }
 
@@ -349,13 +388,15 @@ function pintarCanvas(){
         mapa.width,
         mapa.height
     )
-    lienzo.drawImage(
-        mokeponJugador.mapaFoto,
-        mokeponJugador.x,
-        mokeponJugador.y,
-        mokeponJugador.ancho,
-        mokeponJugador.alto
-    )
+    mokeponJugador.pintarMokepoñ()
+    hipodoge.pintarMokepoñ()
+    capipepo.pintarMokepoñ()
+    ratigueya.pintarMokepoñ()
+    if(mokeponJugador.velocidadX !== 0 || mokeponJugador.velocidadY !== 0){
+        revisarColision(hipodoge)
+        revisarColision(capipepo)
+        revisarColision(ratigueya)
+}
 }
 
 //Mueve el mokepoñ usando las variables velocidad para modificar su posicion
@@ -412,7 +453,32 @@ function iniciarMapa(){
     window.addEventListener('keyup', detenerMovimiento)  
 }
 
+//Revisa las coordenadas del mapa para validar colision entre personajes
+function revisarColision(enemigo){
+    const arribaMokepoñ= mokeponJugador.y
+    const abajoMokepoñ= mokeponJugador.y + mokeponJugador.alto
+    const izquierdaMokepoñ= mokeponJugador.x
+    const derechaMokepoñ= mokeponJugador.x + mokeponJugador.ancho
+
+    const arribaEnemigo = enemigo.y
+    const abajoEnemigo = enemigo.y + enemigo.alto
+    const izquierdaEnemigo = enemigo.x
+    const derechaEnemigo = enemigo.x + enemigo.ancho
+    if(
+        abajoMokepoñ  < arribaEnemigo ||
+        arribaMokepoñ > abajoEnemigo  ||
+        derechaMokepoñ < izquierdaEnemigo  ||
+        izquierdaMokepoñ > derechaEnemigo
+    ){
+        return
+    }
+    detenerMovimiento()
+    clearInterval(intervalo)
+    seccionAtaques.style.display = 'flex'
+    sectionVerMapa.style.display = 'none'
+    alert('Has encontrado un '+ enemigo.nombre +' salvaje')
+    seleccionarMokeponEnemigo(enemigo)
+}
+
 //Carga los eventos del juego
 window.addEventListener('load',iniciarJuego)
-
-
