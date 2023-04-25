@@ -86,24 +86,15 @@ body{
     justify-content: center;
 }
 
-#ver-mapa button{
-    background-color:  rgb(114, 185, 156);;
-    width: 120px;
-    padding: 5px;
+#ver-mapa h2{
+    color:rgb(218, 204, 17);;
     font-family: 'Itim', cursive;
-    font-size: large;
-    border-radius: 36px;
-    box-sizing: border-box;
-    margin: 28px;
+    font-size: xx-large;
 }
 
 #botones-movimiento{
     display: flex;
     flex-direction: row;
-}
-
-#mapa{
-    border: 2px solid white;
 }
 
 .mokepones, #botones-ataque{

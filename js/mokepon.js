@@ -42,13 +42,18 @@ const mapa = document.getElementById('mapa')
 let lienzo = mapa.getContext("2d")
 let mapaBackground = new Image()
 mapaBackground.src = './img/map.png'
-let alturaQueBuscamos
+let nuevaAltura
 let anchoDelMapa = window.innerWidth - 20
+const anchoMaximoDelMapa = 800
 
-alturaQueBuscamos = anchoDelMapa* 600 / 800
+if (anchoDelMapa > anchoMaximoDelMapa) {
+    anchoDelMapa = anchoMaximoDelMapa - 20
+}
+
+nuevaAltura = anchoDelMapa * 600 / 800
 
 mapa.width = anchoDelMapa
-mapa.height = alturaQueBuscamos
+mapa.height = nuevaAltura
 
 class Mokepoñ{
     constructor(nombre, tipo, foto,fotoMapa){
@@ -56,10 +61,10 @@ class Mokepoñ{
         this.tipo = tipo
         this.foto = foto
         this.ataques = []
-        this.x = aleatorio(0,600)
-        this.y = aleatorio(0,400)
         this.ancho = 60
         this.alto = 60
+        this.x = aleatorio(0, (mapa.width - this.ancho))
+        this.y = aleatorio(0, (mapa.height - this.alto))
         this.mapaFoto = new Image()
         this.mapaFoto.src = fotoMapa
         this.velocidadX = 0
@@ -446,8 +451,6 @@ function teclaPresionada(event){
 }
 
 function iniciarMapa(){
-    mapa.width = 800
-    mapa.height = 600
     intervalo = setInterval(pintarCanvas, 50)
     window.addEventListener('keydown', teclaPresionada)
     window.addEventListener('keyup', detenerMovimiento)  
