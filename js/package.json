@@ -8,6 +8,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "aws-amplify": "^5.0.18",
+    "express": "^4.18.2",
     "js-cookie": "^3.0.1",
     "luxon": "^3.1.0",
     "process": "^0.11.10",
@@ -40,7 +41,6 @@
   },
   "description": "Ejecutando Node.js para el curso de programacion basica",
   "main": "mokepon.js",
-  "devDependencies": {},
   "author": "PlayersSlayer96",
   "license": "ISC"
 }
