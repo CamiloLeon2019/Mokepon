@@ -44,6 +44,7 @@ let mapaBackground = new Image()
 mapaBackground.src = './img/map.png'
 let alturaQueBuscamos
 let anchoDelMapa = window.innerWidth - 20
+let jugadorId
 
 alturaQueBuscamos = anchoDelMapa* 600 / 800
 
@@ -201,6 +202,7 @@ function nuevoJugador(){
                 res.text()
                     .then(function (respuesta){
                         console.log(respuesta)
+                        jugadorId = respuesta
                     })
             }
         })
@@ -236,9 +238,25 @@ function seleccionarMokeponJugador(){
     }else{
         alert('No has seleccionado ningun Moképoñ')
     }
+
+    identificarMokepon(mokeponJugador)
     seccionSeleccionMokepon.style.display = 'none'
     sectionVerMapa.style.display = 'flex'
     iniciarMapa()
+}
+
+//
+function identificarMokepon(mokeponJugador){
+    fetch(`http://localhost:8080/mokepon${jugadorId}`,{
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            mokepon: mokeponJugador
+        })
+    })
+        .then
 }
 
 //Funcion para extrear el aray de ataques de cada objeto Mokepon

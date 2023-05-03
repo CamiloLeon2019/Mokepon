@@ -1,6 +1,10 @@
 const express = require("express")
+const cors = require("cors")
 const jugadores = []
 const app = express()
+
+app.use(cors())
+app.use(express.json())
 
 class Jugador{
   constructor(id){
@@ -16,6 +20,14 @@ app.get("/unirse", (req,res) =>{
     res.setHeader("Access-Control-Allow-Origin", "*")
     res.send(id)
 })
+
+app.post("/mokepon/:jugadorId", (req, res) => {
+    const jugadorId = req.params.jugadorId || ""
+    console.log(jugadores)
+    console.log(jugadorId)
+    res.end()
+})
+
 
 app.listen(8080, () =>{
     console.log("Servidor Express funcionando")
