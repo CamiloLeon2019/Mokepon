@@ -186,11 +186,24 @@ function iniciarJuego(){
     inputNanai          = document.getElementById('Nanai')
     inputPytwo          = document.getElementById('Pytwo')
     })
-
+    nuevoJugador()
     botonMokeponJugador.addEventListener('click', seleccionarMokeponJugador)
     seccionAtaques.style.display = 'none'
     sectionVerMapa.style.display = 'none'
     botonReiniciar.style.display = 'none'
+}
+
+//Usa el metodo GET en el servidor de node para obtener el id de cada jugador nuevo
+function nuevoJugador(){
+    fetch("http://localhost:8080/unirse")
+        .then(function (res){
+            if(res.ok){
+                res.text()
+                    .then(function (respuesta){
+                        console.log(respuesta)
+                    })
+            }
+        })
 }
 
 //Logica para la seleccion del mokepoñ jugador y del oponente
