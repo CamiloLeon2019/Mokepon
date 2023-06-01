@@ -8,7 +8,8 @@ app.use(express.static('public'))
 app.use(express.json())
 
 class Jugador{
-  constructor(id){
+  constructor(nombre, id){
+    this.nombre = nombre
     this.id = id
   }
 
@@ -37,14 +38,14 @@ app.post("/reiniciar/:jugadorId", (req, res) => {
   const jugadorIndex = jugadores.findIndex((jugador) => jugadorId === jugador.id )
   console.log("El jugador "+jugadores[jugadorIndex].id + " fue eliminado")
   jugadores.splice(jugadorIndex,1)
-
   console.log(jugadores)
 });
 
 //metodo para obtener el id de cada nuevo jugador
-app.get("/unirse", (req,res) =>{
+app.post("/unirse/:nombre", (req,res) =>{
     const id = `${Math.random()}`
-    const jugador = new Jugador(id)
+    const nombre = req.body.nombre
+    const jugador = new Jugador(nombre,id)
     jugadores.push(jugador)
     res.setHeader("Access-Control-Allow-Origin", "*")
     res.send(id)

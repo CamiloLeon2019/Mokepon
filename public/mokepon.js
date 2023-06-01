@@ -24,6 +24,7 @@ let ataquesMokepon = []
 let ataquesMokeponEnemigo = []
 let ataqueAdicional
 let intervalo
+const seccionInfoJugador = document.getElementById('info-jugador')
 const spanVidasJugador = document.getElementById('vidas-jugador')
 const spanVidasEnemigo = document.getElementById('vidas-oponente')
 const contenedorTarjetas =  document.getElementById("contenedorTarjetas")
@@ -32,9 +33,12 @@ const mokeponSeleccionado = document.getElementById('mokepon-seleccionado')
 const mokeponOponenteSeleccionado = document.getElementById('mokepon-oponente')
 const logAtaqueJugador = document.getElementById('log-ataque-jugador')
 const logAtaqueOponente = document.getElementById('log-ataque-oponente')
+const textJugador = document.getElementById('text-nombre')
+const nombreJugador = document.getElementById('nombre-jugador')
 const botonMokeponJugador = document.getElementById('boton-seleccion-mokepon')
 const botonReiniciar = document.getElementById('reiniciar')
 const botonHardReset = document.getElementById('hard-reset')
+const botonComenzarJuego = document.getElementById('aceptar')
 const seccionAtaques = document.getElementById('seleccion-ataque')
 const seccionSeleccionMokepon = document.getElementById('seleccion-elemento')
 const sectionResultado = document.getElementById('log-resultado')
@@ -141,6 +145,21 @@ let tierra = new Ataque('Tierra', 'tierra')
 
 ataques.push(fuego,agua,tierra)
 
+//Asocia el nombre del jugador con un nuevoId
+function crearJugador(){
+    if(textJugador.value == ""){
+        alert('Debes darnos un nombre!')
+    }else{
+        nuevoJugador(textJugador.value)
+        nombreJugador.innerHTML = textJugador.value
+        textJugador.style.display = 'none'
+        botonComenzarJuego.style.display = 'none'
+        botonHardReset.style.display = 'block'
+        botonMokeponJugador.addEventListener('click', seleccionarMokeponJugador)// apunta a funcion que asigna el mokepon al jugador
+        seccionSeleccionMokepon.style.display = 'flex'
+    }   
+    }
+
 //Inicia el juego desplegando el dashboard de seleccion de mokepon a elegir segun su elemento y tambien cada ataque 
 function iniciarJuego(){
     mokepones.forEach((mokepon) =>{
@@ -163,27 +182,38 @@ function iniciarJuego(){
     inputCapipepo       = document.getElementById('Capipepo')
     inputRatigueya      = document.getElementById('Ratigueya')    
     })
-    botonHardReset.addEventListener('click',reiniciarJuego)
-    nuevoJugador() //crea un nuevo jugador unico
-    botonMokeponJugador.addEventListener('click', seleccionarMokeponJugador)// apunta a funcion que asigna el mokepon al jugador
+    seccionInfoJugador.style.display = 'flex'
+    seccionSeleccionMokepon.style.display = 'none'
     seccionAtaques.style.display = 'none'
     sectionVerMapa.style.display = 'none'
     botonReiniciar.style.display = 'none'
+    botonHardReset.style.display = 'none'
+    botonHardReset.addEventListener('click',reiniciarJuego)
+    botonComenzarJuego.addEventListener('click',crearJugador)
 }
 
 //Usa el metodo GET en el servidor de node para obtener el id de cada jugador nuevo
-function nuevoJugador(){
-    fetch("/unirse")
-        .then(function (res){
-            if(res.ok){
-                res.text()
-                    .then(function (respuesta){
-                        console.log(respuesta)
-                        jugadorId = respuesta
-                    })
-            }
+function nuevoJugador(nombre){
+    fetch(`/unirse/${nombre}`,{
+        method: "post",
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nombre
         })
+    })    
+    .then(function (res){
+        if(res.ok){
+            res.text()
+                .then(function (respuesta){
+                    console.log("Jugador: "+ nombre +" Id: "+respuesta)
+                    jugadorId = respuesta
+                })
+        }
+    })
 }
+
 
 //Logica para la seleccion del mokepoñ jugador y del oponente
 function seleccionarMokeponJugador(){
