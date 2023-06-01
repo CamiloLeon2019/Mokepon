@@ -34,6 +34,7 @@ const logAtaqueJugador = document.getElementById('log-ataque-jugador')
 const logAtaqueOponente = document.getElementById('log-ataque-oponente')
 const botonMokeponJugador = document.getElementById('boton-seleccion-mokepon')
 const botonReiniciar = document.getElementById('reiniciar')
+const botonHardReset = document.getElementById('hard-reset')
 const seccionAtaques = document.getElementById('seleccion-ataque')
 const seccionSeleccionMokepon = document.getElementById('seleccion-elemento')
 const sectionResultado = document.getElementById('log-resultado')
@@ -162,6 +163,7 @@ function iniciarJuego(){
     inputCapipepo       = document.getElementById('Capipepo')
     inputRatigueya      = document.getElementById('Ratigueya')    
     })
+    botonHardReset.addEventListener('click',reiniciarJuego)
     nuevoJugador() //crea un nuevo jugador unico
     botonMokeponJugador.addEventListener('click', seleccionarMokeponJugador)// apunta a funcion que asigna el mokepon al jugador
     seccionAtaques.style.display = 'none'
@@ -171,7 +173,7 @@ function iniciarJuego(){
 
 //Usa el metodo GET en el servidor de node para obtener el id de cada jugador nuevo
 function nuevoJugador(){
-    fetch("http://192.168.5.107:8080/unirse")
+    fetch("/unirse")
         .then(function (res){
             if(res.ok){
                 res.text()
@@ -234,7 +236,7 @@ function seleccionarMokeponJugador(){
 
 //Funcion que identifca el mokepoñ propio a partir del Id del jugador
 function identificarMokepon(mokepon){
-    fetch(`http://192.168.5.107:8080/mokepon/${jugadorId}`,{
+    fetch(`/mokepon/${jugadorId}`,{
         method: "post",
         headers: {
             "Content-Type": "application/json"
@@ -317,7 +319,7 @@ function sequenciaAtaque(){
 
 //funcion para enviar la secuencia de ataques propia de cada jugador hacia el servidor
 function enviarAtaqueAServidor(){
-    fetch(`http://192.168.5.107:8080/mokepon/${jugadorId}/ataques`,{
+    fetch(`/mokepon/${jugadorId}/ataques`,{
         method: "post",
         headers: {
             "Content-Type": "application/json"
@@ -333,7 +335,7 @@ function enviarAtaqueAServidor(){
 
 //Obtiene el array de ataques del jugador enemigo
 function obtenerAtaques(){
-    fetch(`http://192.168.5.107:8080/mokepon/${enemigoId}/ataques`)
+    fetch(`/mokepon/${enemigoId}/ataques`)
         .then(function (res){
             if(res.ok){
                 res.json()
@@ -455,7 +457,7 @@ function pintarCanvas(){
 
 //funcion para enviar la posicion de cada jugador al servidor 
 function enviarPosicion(x,y){
-    fetch(`http://192.168.5.107:8080/mokepon/${jugadorId}/posicion`,{
+    fetch(`/mokepon/${jugadorId}/posicion`,{
         method: "post",
         headers: {
             "Content-Type": "application/json"
@@ -536,12 +538,14 @@ function detenerMovimiento(){
 }
 //Permite reiniciar el juego haciendo un reinicio
 function reiniciarJuego(){
-    fetch("http://192.168.5.107:8080/mokepon/reiniciar", {
-        method: 'POST', // Use the appropriate HTTP method for your API
+    fetch(`/reiniciar/${jugadorId}`, {
+        method: "post", // Use the appropriate HTTP method for your API
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({}) // Send an empty object as the request body
+        body: JSON.stringify({
+            jugadorId
+        }) // Send an empty object as the request body
       })
         .then(response => {
           if (response.ok) {

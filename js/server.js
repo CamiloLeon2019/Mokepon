@@ -32,10 +32,13 @@ class Mokepon {
   }
 }
 
-app.post("mokepon/reiniciar", (req, res) => {
-  jugadores = [] // Clear the array by setting its length to 0
-  console.log("Si entra", jugadores)
-  res.sendStatus(200); // Send a success status code
+app.post("/reiniciar/:jugadorId", (req, res) => {
+  const jugadorId = req.body.jugadorId || ""
+  const jugadorIndex = jugadores.findIndex((jugador) => jugadorId === jugador.id )
+  console.log("El jugador "+jugadores[jugadorIndex].id + " fue eliminado")
+  jugadores.splice(jugadorIndex,1)
+
+  console.log(jugadores)
 });
 
 //metodo para obtener el id de cada nuevo jugador
