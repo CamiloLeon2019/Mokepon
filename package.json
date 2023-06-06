@@ -1,0 +1,36 @@
+{
+  "name": "mokepon",
+  "homepage": "./index.html",
+  "version": "1.0.0",
+  "description": "new build",
+  "main": "public/mokepon.js",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "object-assign": "^4.1.1",
+    "vary": "^1.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "nodemon js/server.js"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "author": "PlayersSlayer96",
+  "license": "ISC"
+}
